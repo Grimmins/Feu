@@ -8,19 +8,28 @@ def read_file_to_list(filename):
             result.append(line_list)
     return result
 
-def toComplete(filename, origin):
-    result = read_file_to_list(filename)
-    print(result)
+def toComplete(board, to_find, origin):
     maxX = -sys.maxsize - 1
-    print(maxX)
-    for i in range(len(result)):
-        maxX = max(maxX, len(result[i]))
-    maxY = len(result)
+    for i in range(len(board)):
+        maxX = max(maxX, len(board[i]))
+    maxY = len(board)
     ch = ""
+    NBx = originToTabCoordonates(to_find, origin)
     for i in range(maxY):
         for j in range(maxX):
-            if i == origin[0] and j == origin[1]:
-                ch +=
+            if [i,j] in NBx and to_find[i-origin[0]][j-origin[1]] != ' ':
+                ch += to_find[i-origin[0]][j-origin[1]]
+            else:
+                ch += "-"
+        ch += '\n'
+    return ch
+
+def originToTabCoordonates(to_find, origin):
+    NBx = []
+    for i in range(len(to_find)):
+        for j in range(len(to_find[i])):
+            NBx.append([origin[0]+i,origin[1]+j])
+    return NBx
 
 
 def final_test(board, to_find):
@@ -51,5 +60,9 @@ def check_if_equals(test_board, to_find):
 
 board = read_file_to_list(sys.argv[1])
 to_find = read_file_to_list(sys.argv[2])
-print(final_test(board, to_find), origin)
-print(toComplete(sys.argv[1]))
+if final_test(board, to_find):
+    print("Trouvé !")
+    print("Coordonnées : " + str(origin[1]) + ", " + str(origin[0]))
+    print(toComplete(board, to_find, origin))
+else:
+    print("Introuvable !")
