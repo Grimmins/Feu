@@ -13,10 +13,13 @@ def check_if_file_correct(filename):
 
 def list_of_lines(filename):
     result = []
-    with open(filename, "r") as file:
+    try:
+        file = open(filename, 'r')
         for line in file:
             line_list = list(line.rstrip('\n'))
             result.append(line_list)
+    except FileNotFoundError:
+        print(f"Le fichier {filename} n'a pas été trouvé !", file=sys.stderr)
     return result
 
 def file_to_tab(filename):
@@ -102,7 +105,7 @@ global tab
 if len(sys.argv) != 2:
     print("erreur d'argument on souhaite le nom d'un seul fichier .txt en argument")
 elif not check_if_file_correct(sys.argv[1]):
-    print("erreur de format du fichier texte")
+    print("erreur de format du fichier texte ou fichier introuvable")
 else:
     tab = file_to_tab(sys.argv[1])
     print(display(tab))
